@@ -105,6 +105,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/smart_pixels_title">
+
+        <!-- Smart Pixels -->
+        <Preference
+           android:key="smart_pixels" 
+           android:fragment="com.palladium.atomichub.fragments.SmartPixels"
+           android:title="@string/smart_pixels_title"
+           android:summary="@string/smart_pixels_summary" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/system_animations_category_title">
 
         <com.palladium.support.preferences.GlobalSettingSwitchPreference

@@ -46,6 +46,7 @@ public class frag_misc extends SettingsPreferenceFragment implements OnPreferenc
     private static final String FINGERPRINT_ERROR_VIB = "fingerprint_error_vib";
     private static final String INCALL_VIB_OPTIONS = "incall_vib_options";
     private static final String RINGTONE_FOCUS_MODE = "ringtone_focus_mode";
+    private static final String SMART_PIXELS = "smart_pixels";
 
     private SwitchPreference mFingerprintErrorVib;
     private SystemSettingSwitchPreference mFingerprintUnlock;
@@ -58,6 +59,7 @@ public class frag_misc extends SettingsPreferenceFragment implements OnPreferenc
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.ps_misc);
+        updateSmartPixelsPreference();
         mOverlayService = IOverlayManager.Stub
                 .asInterface(ServiceManager.getService(Context.OVERLAY_SERVICE));
         //Feature Additon!
@@ -140,6 +142,17 @@ public class frag_misc extends SettingsPreferenceFragment implements OnPreferenc
     public void onPause() {
         super.onPause();
     }
+
+    private void updateSmartPixelsPreference() {
+        PreferenceScreen prefSet = getPreferenceScreen();
+        boolean enableSmartPixels = getContext().getResources().
+                getBoolean(com.android.internal.R.bool.config_supportSmartPixels);
+        Preference smartPixels = findPreference(SMART_PIXELS);
+
+        if (!enableSmartPixels){
+            prefSet.removePreference(smartPixels);
+         }
+     }
 
 
     @Override

@@ -118,6 +118,18 @@
 
 
     <PreferenceCategory
+        android:title="@string/allow_signature_fake">
+
+        <com.palladium.support.preferences.GlobalSettingSwitchPreference
+            android:key="allow_signature_fake"
+            android:title="@string/allow_signature_fake"
+            android:summary="@string/allow_signature_fake_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
         android:title="@string/gaming_mode_title">
 
         <Preference

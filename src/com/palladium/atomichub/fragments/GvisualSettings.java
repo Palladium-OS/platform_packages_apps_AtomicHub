@@ -52,6 +52,11 @@ import com.android.settings.search.BaseSearchIndexProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.*;
+
+import com.palladium.support.preferences.CustomSeekBarPreference;
+import com.palladium.support.preferences.SecureSettingSwitchPreference;
+
 
 public class GvisualSettings extends SettingsPreferenceFragment implements
          OnPreferenceChangeListener {
@@ -60,6 +65,10 @@ public class GvisualSettings extends SettingsPreferenceFragment implements
     private static final String PREF_SB_HEIGHT = "statusbar_height";
     private static final String PREF_NB_COLOR = "navbar_color";
     private static final String PREF_HD_SIZE = "header_size";
+    private static final String SYSUI_ROUNDED_SIZE = "sysui_rounded_size";
+    private static final String SYSUI_ROUNDED_CONTENT_PADDING = "sysui_rounded_content_padding";
+    private static final String SYSUI_ROUNDED_FWVALS = "sysui_rounded_fwvals";
+
 
     private IOverlayManager mOverlayManager;
     private IOverlayManager mOverlayService;
@@ -67,6 +76,9 @@ public class GvisualSettings extends SettingsPreferenceFragment implements
     private ListPreference mSbHeight;
     private ListPreference mnbSwitch;
     private ListPreference mhdSize;
+    private CustomSeekBarPreference mCornerRadius;
+    private CustomSeekBarPreference mContentPadding;
+    private SecureSettingSwitchPreference mRoundedFwvals;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,6 +113,37 @@ public class GvisualSettings extends SettingsPreferenceFragment implements
         }
         mSbHeight.setSummary(mSbHeight.getEntry());
         mSbHeight.setOnPreferenceChangeListener(this);
+        Resources res = null;
+        Context ctx = getContext();
+        float density = Resources.getSystem().getDisplayMetrics().density;
+
+        try {
+            res = ctx.getPackageManager().getResourcesForApplication("com.android.systemui");
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Rounded Corner Radius
+        mCornerRadius = (CustomSeekBarPreference) findPreference(SYSUI_ROUNDED_SIZE);
+        int resourceIdRadius = (int) ctx.getResources().getDimension(com.android.internal.R.dimen.rounded_corner_radius);
+        int cornerRadius = Settings.Secure.getIntForUser(ctx.getContentResolver(), Settings.Secure.SYSUI_ROUNDED_SIZE,
+                ((int) (resourceIdRadius / density)), UserHandle.USER_CURRENT);
+        mCornerRadius.setValue(cornerRadius);
+        mCornerRadius.setOnPreferenceChangeListener(this);
+
+        // Rounded Content Padding
+        // mContentPadding = (CustomSeekBarPreference) findPreference(SYSUI_ROUNDED_CONTENT_PADDING);
+        // int resourceIdPadding = res.getIdentifier("com.android.systemui:dimen/rounded_corner_content_padding", null,
+        //         null);
+        // int contentPadding = Settings.Secure.getIntForUser(ctx.getContentResolver(),
+        //        Settings.Secure.SYSUI_ROUNDED_CONTENT_PADDING,
+        //        (int) (res.getDimension(resourceIdPadding) / density), UserHandle.USER_CURRENT);
+        //mContentPadding.setValue(contentPadding);
+        //mContentPadding.setOnPreferenceChangeListener(this);
+
+        // Rounded use Framework Values
+        mRoundedFwvals = (SecureSettingSwitchPreference) findPreference(SYSUI_ROUNDED_FWVALS);
+        mRoundedFwvals.setOnPreferenceChangeListener(this);
     }
 
     public void handleOverlays(String packagename, Boolean state, IOverlayManager mOverlayManager) {
@@ -220,6 +263,17 @@ public class GvisualSettings extends SettingsPreferenceFragment implements
         }
         mSbHeight.setSummary(mSbHeight.getEntry());
         return true;
+        } else if (preference == mCornerRadius) {
+            Settings.Secure.putIntForUser(getContext().getContentResolver(), Settings.Secure.SYSUI_ROUNDED_SIZE,
+                    (int) objValue, UserHandle.USER_CURRENT);
+            return true;
+        //} else if (preference == mContentPadding) {
+        //    Settings.Secure.putIntForUser(getContext().getContentResolver(), Settings.Secure.SYSUI_ROUNDED_CONTENT_PADDING,
+        //            (int) newValue, UserHandle.USER_CURRENT);
+        //    return true;
+        } else if (preference == mRoundedFwvals) {
+            restoreCorners();
+            return true;
         }
         return false;
     }
@@ -281,6 +335,23 @@ public class GvisualSettings extends SettingsPreferenceFragment implements
     @Override
     public int getMetricsCategory() {
         return MetricsEvent.PALLADIUM;
+    }
+
+    private void restoreCorners() {
+        Resources res = null;
+        float density = Resources.getSystem().getDisplayMetrics().density;
+        Context ctx = getContext();
+
+        try {
+            res = ctx.getPackageManager().getResourcesForApplication("com.android.systemui");
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        int resourceIdRadius = (int) ctx.getResources().getDimension(com.android.internal.R.dimen.rounded_corner_radius);
+        //int resourceIdPadding = res.getIdentifier("com.android.systemui:dimen/rounded_corner_content_padding", null, null);
+        mCornerRadius.setValue((int) (resourceIdRadius / density));
+        //mContentPadding.setValue((int) (res.getDimension(resourceIdPadding) / density));
     }
 
     /**

@@ -1,5 +1,8 @@
 package com.palladium.atomichub.categories;
 
+import static android.os.UserHandle.USER_CURRENT;
+import static android.os.UserHandle.USER_SYSTEM;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -56,12 +59,15 @@ import com.android.settings.display.FontPickerPreferenceController;
 @SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
 public class frag_theme extends DashboardFragment implements OnPreferenceChangeListener {
 
+    private static final String CUSTOM_CLOCK_FACE = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_FACE;
+    private static final String DEFAULT_CLOCK = "com.android.keyguard.clock.DefaultClockController";
     private static final String ACCENT_COLOR = "accent_color";
     private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
     private static final int MENU_RESET = Menu.FIRST;
 
     static final int DEFAULT = 0xff1a73e8;
 
+    private ListPreference mLockClockStyles;
     private IOverlayManager mOverlayService;
     private ColorPickerPreference mThemeColor;
 
@@ -98,6 +104,11 @@ public class frag_theme extends DashboardFragment implements OnPreferenceChangeL
 
         setupAccentPref();
         setHasOptionsMenu(true);
+        mLockClockStyles = (ListPreference) findPreference(CUSTOM_CLOCK_FACE);
+        String mLockClockStylesValue = getLockScreenCustomClockFace();
+        mLockClockStyles.setValue(mLockClockStylesValue);
+        mLockClockStyles.setSummary(mLockClockStyles.getEntry());
+        mLockClockStyles.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -132,7 +143,12 @@ public class frag_theme extends DashboardFragment implements OnPreferenceChangeL
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         final String key = preference.getKey();
-        if (preference == mThemeColor) {
+        if (preference == mLockClockStyles) {
+            setLockScreenCustomClockFace((String) newValue);
+            int index = mLockClockStyles.findIndexOfValue((String) newValue);
+            mLockClockStyles.setSummary(mLockClockStyles.getEntries()[index]);
+            return true;
+        } else if (preference == mThemeColor) {
             int color = (Integer) newValue;
             String hexColor = String.format("%08X", (0xFFFFFFFF & color));
             SystemProperties.set(ACCENT_COLOR_PROP, hexColor);
@@ -191,6 +207,30 @@ public class frag_theme extends DashboardFragment implements OnPreferenceChangeL
         mThemeColor = (ColorPickerPreference) findPreference(ACCENT_COLOR);
         SystemProperties.set(ACCENT_COLOR_PROP, "-1");
         mThemeColor.setNewPreviewColor(DEFAULT);
+    }
+
+    private String getLockScreenCustomClockFace() {
+        String value = Settings.Secure.getStringForUser(mContext.getContentResolver(),
+                CUSTOM_CLOCK_FACE, USER_CURRENT);
+
+        if (value == null || value.isEmpty()) value = DEFAULT_CLOCK;
+
+        try {
+            JSONObject json = new JSONObject(value);
+            return json.getString("clock");
+        } catch (JSONException ex) {
+        }
+        return value;
+    }
+
+    private void setLockScreenCustomClockFace(String value) {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("clock", value);
+            Settings.Secure.putStringForUser(mContext.getContentResolver(), CUSTOM_CLOCK_FACE,
+                    json.toString(), USER_CURRENT);
+        } catch (JSONException ex) {
+        }
     }
 
     @Override

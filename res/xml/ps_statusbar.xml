@@ -57,6 +57,28 @@
 
     <PreferenceCategory
 
+        android:key="reticker"
+        android:title="@string/reticker_category" >
+
+        <com.palladium.support.preferences.SystemSettingSwitchPreference
+            android:key="reticker_status"
+            android:title="@string/reticker_title"
+            android:summary="@string/reticker_summary"
+            android:order="9"
+            android:defaultValue="false" />
+
+        <com.palladium.support.preferences.SystemSettingSwitchPreference
+            android:dependency="reticker_status"
+            android:key="reticker_colored"
+            android:title="@string/reticker_colored_title"
+            android:summary="@string/reticker_colored_summary"
+            android:order="10"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+
         android:title="@string/status_bar_items_category_title">
 
         <Preference

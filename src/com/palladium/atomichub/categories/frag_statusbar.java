@@ -24,6 +24,8 @@ import com.android.settingslib.search.SearchIndexable;
 import android.provider.SearchIndexableResource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
+import android.text.TextUtils;
 import com.android.internal.util.palladium.PalladiumUtils;
 
 @SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
@@ -33,6 +35,7 @@ public class frag_statusbar extends SettingsPreferenceFragment implements OnPref
     private IOverlayManager mOverlayService;
     private static final String LAYOUT_SETTINGS = "navbar_layout_views";
     private static final String NAVIGATION_BAR_INVERSE = "navbar_inverse_layout";
+    private static final String PREF_KEY_CUTOUT = "cutout_settings";
 
     private Preference mLayoutSettings;
     private SwitchPreference mSwapNavButtons;
@@ -47,10 +50,17 @@ public class frag_statusbar extends SettingsPreferenceFragment implements OnPref
         mLayoutSettings = findPreference(LAYOUT_SETTINGS);
         mSwapNavButtons = findPreference(NAVIGATION_BAR_INVERSE);
 
+        Preference mCutoutPref = (Preference) findPreference(PREF_KEY_CUTOUT);
+        String hasDisplayCutout = getResources().getString(com.android.internal.R.string.config_mainBuiltInDisplayCutout);
+
+        if (TextUtils.isEmpty(hasDisplayCutout)) {
+            getPreferenceScreen().removePreference(mCutoutPref);
+        }
         if (!PalladiumUtils.isThemeEnabled("com.android.internal.systemui.navbar.threebutton")) {
             prefScreen.removePreference(mLayoutSettings);
         }
             prefScreen.removePreference(mSwapNavButtons);
+
     }
     @Override
     public int getMetricsCategory() {

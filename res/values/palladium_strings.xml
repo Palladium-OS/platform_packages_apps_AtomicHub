@@ -892,4 +892,8 @@
     <string name="text_charging_symbol_euro">Euro</string>
     <string name="text_charging_symbol_cent">Cent</string>
 
+    <!-- Colored Statusbar Icons -->
+    <string name="statusbar_icons_style">Colored notification icons</string>
+    <string name="statusbar_icons_style_summary">Choose the style of your statusbar notification icons (requires SystemUI restart)</string>
+
 </resources>

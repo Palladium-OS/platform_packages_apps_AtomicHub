@@ -85,34 +85,25 @@ public class frag_misc extends SettingsPreferenceFragment implements OnPreferenc
         }
 
         mFingerprintManager = (FingerprintManager) getActivity().getSystemService(Context.FINGERPRINT_SERVICE);
+        mFingerprintErrorVib = (SwitchPreference) findPreference(FINGERPRINT_ERROR_VIB);
         mFingerprintVib = (SwitchPreference) findPreference(FINGERPRINT_VIB);
         if (mPm.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT) &&
                  mFingerprintManager != null) {
             if (!mFingerprintManager.isHardwareDetected()){
+                prefScreen.removePreference(mFingerprintErrorVib);
                 prefScreen.removePreference(mFingerprintVib);
             } else {
+                mFingerprintErrorVib.setChecked((Settings.System.getInt(getContentResolver(),
+                        Settings.System.FINGERPRINT_ERROR_VIB, 1) == 1));
+                mFingerprintErrorVib.setOnPreferenceChangeListener(this);
+
                 mFingerprintVib.setChecked((Settings.System.getInt(getContentResolver(),
                         Settings.System.FINGERPRINT_SUCCESS_VIB, 1) == 1));
                 mFingerprintVib.setOnPreferenceChangeListener(this);
             }
         } else {
-            prefScreen.removePreference(mFingerprintVib);
-        }
-
-
-        mFingerprintManager = (FingerprintManager) getActivity().getSystemService(Context.FINGERPRINT_SERVICE);
-        mFingerprintErrorVib = (SwitchPreference) findPreference(FINGERPRINT_ERROR_VIB);
-        if (mPm.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT) &&
-                 mFingerprintManager != null) {
-            if (!mFingerprintManager.isHardwareDetected()){
-                prefScreen.removePreference(mFingerprintErrorVib);
-            } else {
-                mFingerprintErrorVib.setChecked((Settings.System.getInt(getContentResolver(),
-                        Settings.System.FINGERPRINT_ERROR_VIB, 1) == 1));
-                mFingerprintErrorVib.setOnPreferenceChangeListener(this);
-           }
-        } else {
             prefScreen.removePreference(mFingerprintErrorVib);
+            prefScreen.removePreference(mFingerprintVib);
         }
 
         PreferenceCategory incallVibCategory = (PreferenceCategory) findPreference(INCALL_VIB_OPTIONS);

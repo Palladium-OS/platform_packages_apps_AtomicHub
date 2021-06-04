@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.content.om.IOverlayManager;
 import android.content.om.OverlayInfo;
@@ -45,6 +48,11 @@ import com.android.settings.development.OverlayCategoryPreferenceController;
 import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.core.lifecycle.Lifecycle;
 
+import com.palladium.support.colorpicker.ColorPickerPreference;
+import com.palladium.support.preferences.CustomSeekBarPreference;
+import com.palladium.support.preferences.SystemSettingSwitchPreference;
+import com.android.settings.display.FontPickerPreferenceController;
+
 @SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
 public class frag_theme extends DashboardFragment implements OnPreferenceChangeListener {
 
@@ -56,6 +64,19 @@ public class frag_theme extends DashboardFragment implements OnPreferenceChangeL
 
     private IOverlayManager mOverlayService;
     private ColorPickerPreference mThemeColor;
+
+    private IntentFilter mIntentFilter;
+    private static FontPickerPreferenceController mFontPickerPreference;
+
+    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals("com.android.server.ACTION_FONT_CHANGED")) {
+                mFontPickerPreference.stopProgress();
+            }
+        }
+    };
 
     @Override
     protected String getLogTag() {
@@ -71,7 +92,10 @@ public class frag_theme extends DashboardFragment implements OnPreferenceChangeL
         super.onCreate(savedInstanceState);
         mOverlayService = IOverlayManager.Stub
                 .asInterface(ServiceManager.getService(Context.OVERLAY_SERVICE));
-        //Feature Additon!
+
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction("com.android.server.ACTION_FONT_CHANGED");
+
         setupAccentPref();
         setHasOptionsMenu(true);
     }
@@ -96,8 +120,7 @@ public class frag_theme extends DashboardFragment implements OnPreferenceChangeL
             Context context, Lifecycle lifecycle, Fragment fragment) {
 
         final List<AbstractPreferenceController> controllers = new ArrayList<>();
-        controllers.add(new OverlayCategoryPreferenceController(context,
-                "android.theme.customization.font"));
+        controllers.add(mFontPickerPreference = new FontPickerPreferenceController(context, lifecycle));
         controllers.add(new OverlayCategoryPreferenceController(context,
                 "android.theme.customization.adaptive_icon_shape"));
         controllers.add(new OverlayCategoryPreferenceController(context,
@@ -173,6 +196,16 @@ public class frag_theme extends DashboardFragment implements OnPreferenceChangeL
     @Override
     public void onResume() {
         super.onResume();
+        final Context context = getActivity();
+        context.registerReceiver(mIntentReceiver, mIntentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        final Context context = getActivity();
+        context.unregisterReceiver(mIntentReceiver);
+        mFontPickerPreference.stopProgress();
     }
 
 

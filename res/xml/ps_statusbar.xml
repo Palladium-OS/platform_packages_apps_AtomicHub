@@ -25,12 +25,6 @@
             android:title="@string/traffic_title"
             android:summary="@string/traffic_summary" />
 
-        <com.palladium.support.preferences.SystemSettingSwitchPreference
-           android:key="statusbar_icons_style"
-           android:title="@string/statusbar_icons_style"
-           android:summary="@string/statusbar_icons_style_summary"
-           android:defaultValue="true" />
-
          <Preference 
             android:key="cutout_settings" 
             android:fragment="com.palladium.atomichub.fragments.CutoutFragment"

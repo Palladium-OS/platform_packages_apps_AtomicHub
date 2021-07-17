@@ -638,6 +638,8 @@
         <item>@string/switch_narrow</item>
         <item>@string/switch_contained</item>
         <item>@string/switch_telegram</item>
+        <item>@string/switch_md2</item>
+        <item>@string/switch_retro</item>
     </string-array>
 
     <string-array name="switch_style_values" translatable="false">
@@ -646,6 +648,8 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
+        <item>6</item>
     </string-array>
 
     <!-- Display cutout options -->

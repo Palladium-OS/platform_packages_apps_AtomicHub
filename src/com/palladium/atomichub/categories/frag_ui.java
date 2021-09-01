@@ -1,5 +1,7 @@
 package com.palladium.atomichub.categories;
 
+import android.app.Activity;
+import android.content.res.Resources;
 import android.content.ContentResolver;
 import android.os.Bundle;
 import android.content.Context;
@@ -10,6 +12,7 @@ import androidx.preference.*;
 import android.content.om.IOverlayManager;
 import android.content.om.OverlayInfo;
 import com.android.settings.R;
+import android.os.SystemProperties;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.settings.Utils;
@@ -25,10 +28,11 @@ import java.util.List;
 @SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
 public class frag_ui extends SettingsPreferenceFragment implements OnPreferenceChangeListener {
 
-    private IOverlayManager mOverlayService;
-    private static final String FOD_ICON_PICKER_CATEGORY = "fod_icon_picker_category";
+    private static final String LOCKSCREEN_FOD_CATEGORY = "lockscreen_fod_category";
 
-     private Preference mFODIconPicker;
+    private IOverlayManager mOverlayService;
+    private Preference mLockscreenFod;
+    private ContentResolver mResolver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,11 +42,13 @@ public class frag_ui extends SettingsPreferenceFragment implements OnPreferenceC
                 .asInterface(ServiceManager.getService(Context.OVERLAY_SERVICE));
         //Feature Additon!
         final PreferenceScreen prefScreen = getPreferenceScreen();
-        mFODIconPicker = (Preference) findPreference(FOD_ICON_PICKER_CATEGORY);
-        if (mFODIconPicker != null
-                && !getResources().getBoolean(com.android.internal.R.bool.config_supportsInDisplayFingerprint)) {
-            prefScreen.removePreference(mFODIconPicker);
-        }
+        final Resources res = getResources();       
+        PreferenceCategory overallPreferences = (PreferenceCategory) findPreference("fod_category");
+        mResolver = getActivity().getContentResolver();
+        Preference mLockscreenFod = findPreference("lockscreen_fod_category");
+            if (! res.getBoolean(com.android.internal.R.bool.config_supportsInDisplayFingerprint)) {
+                    prefScreen.removePreference(overallPreferences);
+            } 
     }
     @Override
     public int getMetricsCategory() {

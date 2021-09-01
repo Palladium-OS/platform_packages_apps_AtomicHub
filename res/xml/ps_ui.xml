@@ -25,13 +25,6 @@
             android:summary="@string/ambient_display_summary"
             android:fragment="com.palladium.atomichub.fragments.AmbientDisplay"/>
 
-        <!-- FOD icon picker -->
-        <Preference
-            android:key="fod_icon_picker_category"
-            android:title="@string/fod_icon_picker_title"
-            android:summary="@string/fod_icon_picker_summary"
-            android:fragment="com.palladium.atomichub.fragments.FODIconPickerFragment" />
-
         <com.palladium.support.preferences.SystemSettingSwitchPreference
             android:key="lockscreen_battery_info"
             android:title="@string/lockscreen_battery_info_title"
@@ -53,6 +46,18 @@
                      android:targetPackage="com.android.systemui"
                       android:targetClass="com.android.systemui.tuner.LockscreenActivity" />
         </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="fod_category"
+        android:title="@string/lockscreen_fod_category">
+
+        <Preference
+            android:key="lockscreen_fod_category"
+            android:fragment="com.palladium.atomichub.fragments.FodGeneral"
+            android:title="@string/lockscreen_fod_category"
+            android:summary="@string/lockscreen_fod_summary" />  
 
     </PreferenceCategory>
 

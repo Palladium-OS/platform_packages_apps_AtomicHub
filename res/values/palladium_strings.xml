@@ -964,5 +964,9 @@
     <string name="lock_screen_custom_clock_face_android_s_dp3">Android S Dp3</string>
     <string name="lock_screen_custom_clock_face_android_twelve">Android 12</string>
 
+    <!-- Fod -->
+    <string name="lockscreen_fod_summary">Configure settings related to the FOD view</string>
+    <string name="lockscreen_fod_category">Fingerprint On Display</string>
+    
 </resources>
 

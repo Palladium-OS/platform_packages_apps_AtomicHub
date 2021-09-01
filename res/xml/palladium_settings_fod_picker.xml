@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Copyright (C) 2020 The Evolution X Project
+    Copyright (C) 2020 Palladium-OS
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -20,45 +20,9 @@
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings"
     android:title="@string/fod_icon_picker_title">
 
-    <com.palladium.support.preferences.SystemSettingListPreference
-        android:key="fod_color"
-        android:dialogTitle="@string/fod_pressed_color_title"
-        android:title="@string/fod_pressed_color_title"
-        android:summary="%s"
-        android:entries="@array/fod_pressed_color_entries"
-        android:entryValues="@array/fod_pressed_color_values"
-        android:defaultValue="0" />
-
-    <!-- FOD recognizing animation -->
-    <com.palladium.support.preferences.SystemSettingSwitchPreference
-        android:key="fod_recognizing_animation"
-        android:title="@string/fod_recog_animation"
-        android:summary="@string/fod_recog_animation_summary"
-        android:defaultValue="false" />
-
-    <com.palladium.support.preferences.SystemSettingListPreference 
-        android:key="fod_anim"
-        android:title="@string/fod_recog_animation_effect_title" 
-        android:summary="%s" 
-        android:entries="@array/fod_recog_animation_entries" 
-        android:entryValues="@array/fod_recog_animation_values" 
-        android:defaultValue="0"
-        android:dependency="fod_recognizing_animation" />            
-
-     <!-- FOD Nightlight -->
-     <com.palladium.support.preferences.SystemSettingSwitchPreference
-        android:key="fod_night_light"
-        android:title="@string/fod_night_light_title"
-        android:summary="@string/fod_night_light_summary"
-        android:defaultValue="@*android:bool/disable_fod_night_light"  />
-
-    <!-- Preview -->
-    <com.palladium.atomichub.preferences.FODIconPicker
-        android:key="fod_icon"
-        android:layout="@layout/fod_picker_preference"
-        android:selectable="false"/>
-
-    <Preference
-        android:summary="@string/fod_pressed_color_footer" />
-
+        <!-- Preview -->
+        <com.palladium.atomichub.preferences.FODIconPicker
+            android:key="fod_icon"
+            android:layout="@layout/fod_picker_preference"
+            android:selectable="false"/>
 </PreferenceScreen>

@@ -967,6 +967,9 @@
     <!-- Fod -->
     <string name="lockscreen_fod_summary">Configure settings related to the FOD view</string>
     <string name="lockscreen_fod_category">Fingerprint On Display</string>
+
+    <string name="use_old_mobiletype_title">Old mobiletype</string>
+    <string name="use_old_mobiletype_summary">Use pre-p mobiletype icons for signal (Reboot required)</string>
     
 </resources>
 

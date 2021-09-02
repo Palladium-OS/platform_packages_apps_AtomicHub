@@ -835,6 +835,7 @@
         <item>@string/lock_screen_custom_clock_face_android_s</item>
         <item>@string/lock_screen_custom_clock_face_android_s_dp3</item>
         <item>@string/lock_screen_custom_clock_face_android_twelve</item>
+        <item>@string/lock_screen_custom_clock_face_palladium</item>
 
     </string-array>
 
@@ -869,6 +870,8 @@
         <item>com.android.keyguard.clock.AndroidSClockController</item>
         <item>com.android.keyguard.clock.AndroidSDP3ClockController</item>
         <item>com.android.keyguard.clock.AndroidTwelveClockController</item>
+        <item>com.android.keyguard.clock.PalladiumClockController</item>
+
 
     </string-array>
 

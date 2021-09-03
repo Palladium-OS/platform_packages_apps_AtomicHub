@@ -146,6 +146,13 @@
             android:max="255"
             settings:min="1"
             android:persistent="false" />
+
+        <com.palladium.support.preferences.SystemSettingSwitchPreference
+        android:key="pulse_on_new_tracks"
+        android:title="@string/pulse_on_new_tracks_title"
+        android:summary="@string/pulse_on_new_tracks_summary"
+        android:defaultValue="true" />
+
     </PreferenceCategory>
 
 

@@ -159,6 +159,10 @@
         android:entries="@array/entries_scrollingcache"
         android:entryValues="@array/values_scrollingcache" />
 
+
+    <PreferenceCategory
+        android:title="@string/system_charging">
+
     <com.palladium.support.preferences.GlobalSettingSwitchPreference
         android:key="wake_when_plugged_or_unplugged"
         android:title="@string/wakeup_when_plugged_unplugged_title"
@@ -180,6 +184,15 @@
            android:summary="%s"
 	       android:dependency="charging_animation"
            android:defaultValue="1" />
+
+    <com.palladium.support.preferences.SystemSettingSwitchPreference
+            android:key="charging_animation_bg"
+            android:title="@string/charging_animation_bg_title"
+            android:summary="@string/charging_animation_bg_summary"
+            android:dependency="charging_animation"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
 
     <Preference
             android:key="gaming_category"

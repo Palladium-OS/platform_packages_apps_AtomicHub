@@ -140,18 +140,6 @@
 
     </PreferenceCategory>
 
-
-    <PreferenceCategory
-        android:title="@string/gaming_mode_title">
-
-        <Preference
-            android:key="gaming_mode"
-            android:summary="@string/gaming_mode_summary"
-            android:fragment="com.palladium.atomichub.fragments.GamingMode" 
-            android:title="@string/gaming_mode_title" />
-
-    </PreferenceCategory>
-
     <PreferenceCategory
         android:title="@string/system_animations_category_title">
 

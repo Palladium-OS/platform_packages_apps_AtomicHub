@@ -1000,5 +1000,9 @@
     <string name="gaming_mode_hardware_keys_title">Disable Hw buttons</string> 
     <string name="gaming_mode_hardware_keys_summary">Disables Hw buttons when GamingMode is active</string>
 
+    <!-- Notification Media Options -->
+    <string name="artwork_media_background_title">Artwork media background</string>
+    <string name="artwork_media_background_summary">Set media artwork as notification media background</string>
+
 </resources>
 

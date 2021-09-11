@@ -79,6 +79,12 @@
             android:defaultValue="25"
             settings:units="dp"/>
 
+         <com.palladium.support.preferences.SystemSettingSwitchPreference
+            android:key="artwork_media_background"
+            android:title="@string/artwork_media_background_title"
+            android:summary="@string/artwork_media_background_summary"
+            android:defaultValue="true" />
+
         <Preference
             android:key="lockscreen_visualizer"
             android:fragment="com.palladium.atomichub.fragments.Visualizer"

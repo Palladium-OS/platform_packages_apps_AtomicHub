@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.*;
 import android.text.TextUtils;
 import com.android.internal.util.palladium.PalladiumUtils;
+import com.palladium.support.preferences.SystemSettingListPreference;
+import android.provider.Settings;
 
 @SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
 
@@ -36,6 +38,11 @@ public class frag_statusbar extends SettingsPreferenceFragment implements OnPref
     private static final String LAYOUT_SETTINGS = "navbar_layout_views";
     private static final String NAVIGATION_BAR_INVERSE = "navbar_inverse_layout";
     private static final String PREF_KEY_CUTOUT = "cutout_settings";
+    private static final String VOLTE_ICON_STYLE = "volte_icon_style";
+    private static final String VOWIFI_ICON_STYLE = "vowifi_icon_style";
+
+    private SystemSettingListPreference mVolteIconStyle;
+    private SystemSettingListPreference mVowifiIconStyle;
 
     private Preference mLayoutSettings;
     private SwitchPreference mSwapNavButtons;
@@ -52,6 +59,18 @@ public class frag_statusbar extends SettingsPreferenceFragment implements OnPref
 
         Preference mCutoutPref = (Preference) findPreference(PREF_KEY_CUTOUT);
         String hasDisplayCutout = getResources().getString(com.android.internal.R.string.config_mainBuiltInDisplayCutout);
+
+        mVolteIconStyle = (SystemSettingListPreference) findPreference(VOLTE_ICON_STYLE);
+        int volteIconStyle = Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.VOLTE_ICON_STYLE, 0);
+        mVolteIconStyle.setValue(String.valueOf(volteIconStyle));
+        mVolteIconStyle.setOnPreferenceChangeListener(this);
+
+        mVowifiIconStyle = (SystemSettingListPreference) findPreference(VOWIFI_ICON_STYLE);
+        int vowifiIconStyle = Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.VOWIFI_ICON_STYLE, 0);
+        mVowifiIconStyle.setValue(String.valueOf(vowifiIconStyle));
+        mVowifiIconStyle.setOnPreferenceChangeListener(this);
 
         if (TextUtils.isEmpty(hasDisplayCutout)) {
             getPreferenceScreen().removePreference(mCutoutPref);
@@ -80,8 +99,23 @@ public class frag_statusbar extends SettingsPreferenceFragment implements OnPref
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        final String key = preference.getKey();
-        return true;
+        ContentResolver resolver = getActivity().getContentResolver();
+         if (preference == mVolteIconStyle) {
+            int volteIconStyle = Integer.parseInt(((String) newValue).toString());
+            Settings.System.putInt(resolver,
+                  Settings.System.VOLTE_ICON_STYLE, volteIconStyle);
+            mVolteIconStyle.setValue(String.valueOf(volteIconStyle));
+            PalladiumUtils.showSystemUiRestartDialog(getContext());
+            return true;
+        } else if (preference == mVowifiIconStyle) {
+            int vowifiIconStyle = Integer.parseInt(((String) newValue).toString());
+            Settings.System.putInt(resolver,
+                  Settings.System.VOWIFI_ICON_STYLE, vowifiIconStyle);
+            mVowifiIconStyle.setValue(String.valueOf(vowifiIconStyle));
+            PalladiumUtils.showSystemUiRestartDialog(getContext());
+            return true;
+        }
+        return false;
     }
 
     /**
